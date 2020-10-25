@@ -1,0 +1,6 @@
+version: "3"
+services:
+    haystack:
+        image: frez9/haystack
+        ports:
+            - "80:5000"
