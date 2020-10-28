@@ -9,9 +9,13 @@ def get_avatarurl_by_userid(user_id):
     return user.avatar_url
 
 def get_listings_by_userid(user_id):
-    return [x.serialize() for x in Listing.query.filter_by(user_id=user_id).all()]
+    return [x.serialize() for x in Listing.query.filter_by(user_id=user_id).order_by(Listing.id.desc()).all()]
 
 def create_user(external_id, avatar_url):
+
+    if User.query.filter_by(external_id=external_id).first() != None:
+        return
+
     new_user = User(
         external_id=external_id,
         avatar_url=avatar_url
@@ -46,7 +50,7 @@ def is_favorited(user_id, listing_id):
     return True
 
 def get_paginated_listings(user_id, page_number):
-    listing_query = Listing.query.paginate(page_number, 50, False)
+    listing_query = Listing.query.order_by(Listing.id.desc()).paginate(page_number, 45, False)
     listings = listing_query.items
     return_list = []
 
@@ -106,7 +110,7 @@ def create_favorite(user_id, listing_id):
     return new_favorite.serialize()
 
 def get_favorites_by_userid(user_id):
-    favorites = Favorite.query.filter_by(user_id=user_id).all()
+    favorites = Favorite.query.filter_by(user_id=user_id).order_by(Favorite.id.desc()).all()
 
     return_list = []
 

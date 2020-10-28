@@ -1,4 +1,5 @@
 from flask_sqlalchemy import SQLAlchemy
+from datetime import datetime
 
 db = SQLAlchemy()
 
@@ -8,6 +9,7 @@ class User(db.Model):
     external_id = db.Column(db.String, nullable=False)
     avatar_url = db.Column(db.String, nullable=True)
     snapchat_username = db.Column(db.String, nullable=True)
+    time_created = db.Column(db.DateTime, default=datetime.utcnow)
 
     def __init__(self, **kwargs):
         self.external_id = kwargs.get('external_id')
@@ -27,6 +29,7 @@ class Listing(db.Model):
     user_id = db.Column(db.Integer, nullable=False)
     product_image_url = db.Column(db.String, nullable=False)
     avatar_url = db.Column(db.String, nullable=True)
+    time_created = db.Column(db.DateTime, default=datetime.utcnow)
     reports = db.relationship('Report', cascade='delete')
     favorites = db.relationship('Favorite', cascade='delete')
 
@@ -50,6 +53,7 @@ class Report(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     report = db.Column(db.String, nullable=False)
     listing_id = db.Column(db.Integer, db.ForeignKey('listing.id'), nullable=False)
+    time_created = db.Column(db.DateTime, default=datetime.utcnow)
 
     def __init__(self, **kwargs):
         self.report = kwargs.get('report')
@@ -67,6 +71,7 @@ class Favorite(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, nullable=False)
     listing_id = db.Column(db.Integer, db.ForeignKey('listing.id'), nullable=False)
+    time_created = db.Column(db.DateTime, default=datetime.utcnow)
 
     def __init__(self, **kwargs):
         self.user_id = kwargs.get('user_id')
