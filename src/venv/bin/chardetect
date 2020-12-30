@@ -1,4 +1,6 @@
-#!/Users/frezghinoel/Documents/haystackdb/src/venv/bin/python
+#!/bin/sh
+'''exec' "/Users/frezghinoel/Documents/Haystack Code/haystack-db/src/venv/bin/python" "$0" "$@"
+' '''
 # -*- coding: utf-8 -*-
 import re
 import sys

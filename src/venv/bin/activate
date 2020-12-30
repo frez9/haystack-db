@@ -46,7 +46,7 @@ deactivate () {
 # unset irrelevant variables
 deactivate nondestructive
 
-VIRTUAL_ENV='/Users/frezghinoel/Documents/haystackdb/src/venv'
+VIRTUAL_ENV='/Users/frezghinoel/Documents/Haystack Code/haystack-db/src/venv'
 export VIRTUAL_ENV
 
 _OLD_VIRTUAL_PATH="$PATH"

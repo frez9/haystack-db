@@ -24,12 +24,12 @@ def failure_response(message, code=404):
 def test():
     return "Hello World!", 200
 
-
 @app.route('/api/users/create/', methods=['POST'])
 def create_user():
     body = json.loads(request.data)
     user = dao.create_user(
         external_id=body.get('external_id'),
+        display_name=body.get('display_name'),
         avatar_url=body.get('avatar_url')
     )
 
@@ -139,11 +139,28 @@ def remove_favorite():
 
     return success_response(removed_favorite)
 
+@app.route('/api/blocks/create/', methods=['POST'])
+def block_user():
+    body = json.loads(request.data)
+    user_id = dao.get_userid_by_externalid(
+        external_id=body.get('external_id')
+    )
+    listing_id = body.get('listing_id')
+    block = dao.create_block(user_id, listing_id)
+
+    return success_response(block, 201)
+
 @app.route('/api/master/frez/delete/', methods=['DELETE'])
 def master_delete():
     deletion = dao.master_delete()
 
     return success_response(deletion)
+
+@app.route('/api/master/frez/displaynames/', methods=['POST'])
+def get_display_names():
+    display_names = dao.get_display_names()
+
+    return success_response(display_names)
 
 
 if __name__ == "__main__":

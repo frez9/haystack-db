@@ -28,7 +28,7 @@ def _deactivate(args):
 _deactivate(["nondestructive"])
 aliases["deactivate"] = _deactivate
 
-$VIRTUAL_ENV = r"/Users/frezghinoel/Documents/haystackdb/src/venv"
+$VIRTUAL_ENV = r"/Users/frezghinoel/Documents/Haystack Code/haystack-db/src/venv"
 
 $_OLD_VIRTUAL_PATH = $PATH
 $PATH = $PATH[:]

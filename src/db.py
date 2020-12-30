@@ -7,12 +7,14 @@ class User(db.Model):
     __tablename__ = 'user'
     id = db.Column(db.Integer, primary_key=True)
     external_id = db.Column(db.String, nullable=False)
+    display_name = db.Column(db.String, nullable=True)
     avatar_url = db.Column(db.String, nullable=True)
     snapchat_username = db.Column(db.String, nullable=True)
     time_created = db.Column(db.DateTime, default=datetime.utcnow)
 
     def __init__(self, **kwargs):
         self.external_id = kwargs.get('external_id')
+        self.display_name = kwargs.get('display_name')
         self.avatar_url = kwargs.get('avatar_url')
 
     def serialize(self):
@@ -82,4 +84,22 @@ class Favorite(db.Model):
             'id': self.id,
             'user_id': self.user_id,
             'listing_id': self.listing_id
+        }
+
+class Block(db.Model):
+    __tablename__ = 'block'
+    id = db.Column(db.Integer, primary_key=True)
+    blocker_id = db.Column(db.Integer, nullable=False)
+    blockee_id = db.Column(db.Integer, nullable=False)
+    time_created = db.Column(db.DateTime, default=datetime.utcnow)
+
+    def __init__(self, **kwargs):
+        self.blocker_id = kwargs.get('blocker_id')
+        self.blockee_id = kwargs.get('blockee_id')
+
+    def serialize(self):
+        return {
+            'id': self.id,
+            'blocker_id': self.blocker_id,
+            'blockee_id': self.blockee_id
         }
