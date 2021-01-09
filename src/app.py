@@ -150,13 +150,13 @@ def block_user():
 
     return success_response(block, 201)
 
-@app.route('/api/master/frez/delete/', methods=['DELETE'])
-def master_delete():
-    deletion = dao.master_delete()
+@app.route('/api/master/frez/newlistings/', methods=['GET'])
+def get_new_listings():
+    new_listings = dao.get_new_listings()
 
-    return success_response(deletion)
+    return success_response(new_listings)
 
-@app.route('/api/master/frez/displaynames/', methods=['POST'])
+@app.route('/api/master/frez/displaynames/', methods=['GET'])
 def get_display_names():
     display_names = dao.get_display_names()
 

@@ -1,4 +1,5 @@
 from db import db, User, Listing, Report, Favorite, Block
+from datetime import datetime
 
 def get_userid_by_externalid(external_id):
     user = User.query.filter_by(external_id=external_id).first()
@@ -158,15 +159,20 @@ def create_block(user_id, listing_id):
     db.session.commit()
     return block.serialize()
 
-def master_delete():
-    User.query.delete()
-    db.session.commit()
-    Listing.query.delete()
-    db.session.commit()
-    Favorite.query.delete()
-    db.session.commit()
-    Report.query.delete()
-    db.session.commit()
+def get_new_listings():
+    listings = Listing.query.all()
+    current_week = datetime.now().isocalendar()[1]
+
+    previous_week_count = 0
+    current_week_count = 0
+
+    for listing in listings:
+        if listing.time_created.isocalendar()[1] == current_week:
+            current_week_count += 1
+        if listing.time_created.isocalendar()[1] == current_week-1:
+            previous_week_count += 1
+
+    return str(previous_week_count)+' new listings last week and '+str(current_week_count)+' new listings so far this week'
 
 def get_display_names():
     users = User.query.all()
