@@ -15,7 +15,7 @@ def get_listings_by_userid(user_id):
 def create_user(external_id, display_name, avatar_url):
 
     if User.query.filter_by(external_id=external_id).first() != None:
-        return
+        return 
 
     new_user = User(
         external_id=external_id,
@@ -80,6 +80,7 @@ def delete_listing(listing_id):
     listing = Listing.query.filter_by(id=listing_id).first()
     db.session.delete(listing)
     db.session.commit()
+    return listing.serialize()
 
 def should_remove_listing(listing_id):
     listing = Listing.query.filter_by(id=listing_id).first()
@@ -96,9 +97,9 @@ def create_report(report, listing_id):
         listing_id=listing_id
     )
 
-    if should_remove_listing(listing_id) == True:
+    if should_remove_listing(listing_id):
         delete_listing(listing_id)
-        return None
+        return new_report.serialize()
 
     db.session.add(new_report)
     db.session.commit()
@@ -146,6 +147,7 @@ def remove_favorite(user_id, listing_id):
     favorite = Favorite.query.filter_by(user_id=user_id, listing_id=listing_id).first()
     db.session.delete(favorite)
     db.session.commit()
+    return favorite.serialize()
 
 def create_block(user_id, listing_id):
     listing = Listing.query.filter_by(id=listing_id).first()
@@ -189,3 +191,7 @@ def get_display_names():
         return_list.append(serial)
 
     return return_list
+
+def get_all_listings():
+    listings = Listing.query.all()
+    return [i.serialize() for i in listings]
