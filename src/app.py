@@ -32,14 +32,13 @@ def create_user():
         display_name=body.get('display_name'),
         avatar_url=body.get('avatar_url')
     )
-
     return success_response(user, 201)
 
-@app.route('/api/users/username/update/', methods=['POST'])
-def update_snapchat_username():
+@app.route('/api/users/<string:external_id>/username/update/', methods=['POST'])
+def update_snapchat_username(external_id):
     body = json.loads(request.data)
     user_id = dao.get_userid_by_externalid(
-        external_id=body.get('external_id')
+        external_id=external_id
     )
     updated_user_info = dao.update_snapchat_username(
         user_id=user_id,
@@ -48,11 +47,11 @@ def update_snapchat_username():
 
     return success_response(updated_user_info)
 
-@app.route('/api/listings/create/', methods=['POST'])
-def create_listing():
+@app.route('/api/users/<string:external_id>/listings/create/', methods=['POST'])
+def create_listing(external_id):
     body = json.loads(request.data)
     user_id = dao.get_userid_by_externalid(
-        external_id=body.get('external_id')
+        external_id=external_id
     )
     avatar_url = dao.get_avatarurl_by_userid(user_id)
     listing = dao.create_listing(
@@ -60,37 +59,36 @@ def create_listing():
         product_image_url=body.get('product_image_url'),
         avatar_url=avatar_url
     )
-
     return success_response(listing, 201)
 
-@app.route('/api/listings/my/', methods=['POST'])
-def get_my_listings():
-    body = json.loads(request.data)
+@app.route('/api/users/<string:external_id>/listings/')
+def get_my_listings(external_id):
+    # body = json.loads(request.data)
     user_id = dao.get_userid_by_externalid(
-        external_id=body.get('external_id')
+        external_id=external_id
     )
     my_listings = dao.get_listings_by_userid(user_id)
 
     return success_response(my_listings)
 
-@app.route('/api/listings/paginated/', methods=['POST'])
-def get_paginated_listings():
-    body = json.loads(request.data)
+@app.route('/api/users/<string:external_id>/listings/page/<int:page_number>/')
+def get_paginated_listings(external_id, page_number):
+    # body = json.loads(request.data)
     user_id = dao.get_userid_by_externalid(
-        external_id=body.get('external_id')
+        external_id=external_id
     )
     listings = dao.get_paginated_listings(
         user_id=user_id,
-        page_number=body.get('page_number')
+        page_number=page_number
     )
 
     return success_response(listings)
 
-@app.route('/api/listings/delete/', methods=['DELETE'])
-def delete_listing():
-    body = json.loads(request.data)
+@app.route('/api/listings/<string:listing_id>/delete/', methods=['DELETE'])
+def delete_listing(listing_id):
+    # body = json.loads(request.data)
     deleted_listing = dao.delete_listing(
-        listing_id=body.get('listing_id')
+        listing_id=listing_id
     )
 
     return success_response(deleted_listing)
@@ -102,48 +100,48 @@ def create_report():
         report=body.get('report'),
         listing_id=body.get('listing_id')
     )
-    if report is None:
-        return failure_response("Listing has been removed for too many reports")
+    # if report is None:
+    #     return failure_response("Listing has been removed for too many reports")
 
     return success_response(report, 201)
 
-@app.route('/api/favorites/create/', methods=['POST'])
-def create_favorite():
+@app.route('/api/users/<string:external_id>/favorites/create/', methods=['POST'])
+def create_favorite(external_id):
     body = json.loads(request.data)
     user_id = dao.get_userid_by_externalid(
-        external_id=body.get('external_id')
+        external_id=external_id
     )
     listing_id = body.get('listing_id')
     favorite = dao.create_favorite(user_id, listing_id)
 
     return success_response(favorite, 201)
 
-@app.route('/api/favorites/my/', methods=['POST'])
-def get_my_favorites():
-    body = json.loads(request.data)
+@app.route('/api/users/<string:external_id>/favorites/')
+def get_my_favorites(external_id):
+    # body = json.loads(request.data)
     user_id = dao.get_userid_by_externalid(
-        external_id=body.get('external_id')
+        external_id=external_id
     )
     my_favorites = dao.get_favorites_by_userid(user_id)
 
     return success_response(my_favorites)
 
-@app.route('/api/favorites/remove/', methods=['DELETE'])
-def remove_favorite():
+@app.route('/api/users/<string:external_id>/favorites/remove/', methods=['DELETE'])
+def remove_favorite(external_id):
     body = json.loads(request.data)
     user_id = dao.get_userid_by_externalid(
-        external_id=body.get('external_id')
+        external_id=external_id
     )
     listing_id = body.get('listing_id')
     removed_favorite = dao.remove_favorite(user_id, listing_id)
 
     return success_response(removed_favorite)
 
-@app.route('/api/blocks/create/', methods=['POST'])
-def block_user():
+@app.route('/api/users/<string:external_id>/blocks/create/', methods=['POST'])
+def block_user(external_id):
     body = json.loads(request.data)
     user_id = dao.get_userid_by_externalid(
-        external_id=body.get('external_id')
+        external_id=external_id
     )
     listing_id = body.get('listing_id')
     block = dao.create_block(user_id, listing_id)
@@ -161,6 +159,12 @@ def get_display_names():
     display_names = dao.get_display_names()
 
     return success_response(display_names)
+
+@app.route('/api/master/austin/all_listings/', methods=['GET'])
+def get_all_listings():
+    listings = dao.get_all_listings()
+
+    return success_response(listings)
 
 
 if __name__ == "__main__":
