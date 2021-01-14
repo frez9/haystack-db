@@ -33,11 +33,12 @@ def update_snapchat_username(user_id, username):
     db.session.commit()
     return user.serialize()
 
-def create_listing(user_id, product_image_url, avatar_url):
+def create_listing(user_id, product_image_url, avatar_url, price):
     new_listing = Listing(
         user_id=user_id,
         product_image_url=product_image_url,
-        avatar_url=avatar_url
+        avatar_url=avatar_url,
+        price=price
     )
 
     db.session.add(new_listing)
@@ -67,6 +68,7 @@ def get_paginated_listings(user_id, page_number):
                 'id': listing.id,
                 'product_image_url': listing.product_image_url,
                 'avatar_url': listing.avatar_url,
+                'price': listing.price,
                 'seller_snapchat_username': user.snapchat_username,
                 'is_favorited': is_favorited(user_id, listing.id)
             }
@@ -133,6 +135,7 @@ def get_favorites_by_userid(user_id):
             'id': listing.id,
             'product_image_url': listing.product_image_url,
             'avatar_url': listing.avatar_url,
+            'price': listing.price,
             'seller_snapchat_username': seller.snapchat_username,
             'is_favorited': is_favorited(user_id, listing.id)
         }

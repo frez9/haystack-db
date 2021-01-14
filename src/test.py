@@ -4,6 +4,7 @@ import requests
 from app import app
 from threading import Thread
 from time import sleep
+import random
 
 
 LOCAL_URL = "http://localhost:5000"
@@ -100,12 +101,12 @@ class TestRoutes(unittest.TestCase):
     def test_d_create_listing(self):
         def create_route(external_id):
             return f'{LOCAL_URL}/api/users/{external_id}/listings/create/'
-        def create_json(product_image_url):
-            j = {'product_image_url': product_image_url}
+        def create_json(product_image_url, price):
+            j = {'product_image_url': product_image_url, 'price': price}
             return json.dumps(j)
-        def create_assert_listing(user, url, user_id):
+        def create_assert_listing(user, url, user_id, price):
             route = create_route(user['external_id'])
-            res = requests.post(route, data=create_json(url))
+            res = requests.post(route, data=create_json(url, price))
             body = unwrap_response(res)
             listing = body['data']
 
@@ -116,8 +117,10 @@ class TestRoutes(unittest.TestCase):
 
         i_num = 50
         for i in range(i_num):
-            create_assert_listing(SAMPLE_USER1, f'www.product{i}_url.com', USER1_ID)
-            create_assert_listing(SAMPLE_USER2, f'www.product{i_num+i}_url.com', USER2_ID)
+            price1 = random.randint(0, 100)
+            price2 = random.randint(0, 100)
+            create_assert_listing(SAMPLE_USER1, f'www.product{i}_url.com', USER1_ID, price1)
+            create_assert_listing(SAMPLE_USER2, f'www.product{i_num+i}_url.com', USER2_ID, price2)
 
     def test_e_get_my_listings(self):
         def create_route(external_id):

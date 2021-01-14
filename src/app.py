@@ -57,7 +57,8 @@ def create_listing(external_id):
     listing = dao.create_listing(
         user_id=user_id,
         product_image_url=body.get('product_image_url'),
-        avatar_url=avatar_url
+        avatar_url=avatar_url,
+        price=body.get('price')
     )
     return success_response(listing, 201)
 
