@@ -64,17 +64,19 @@ def get_paginated_listings(user_id, page_number):
 
             blocked = Block.query.filter_by(blocker_id=user_id, blockee_id=seller_id).first()
 
-            serial = {
-                'id': listing.id,
-                'product_image_url': listing.product_image_url,
-                'avatar_url': listing.avatar_url,
-                'price': listing.price,
-                'views': listing.views,
-                'seller_snapchat_username': user.snapchat_username,
-                'is_favorited': is_favorited(user_id, listing.id)
-            }
-
             if blocked is None:
+                serial = listing.serialize()
+                serial['seller_snapchat_username'] = user.snapchat_username
+                serial['is_favorited'] = is_favorited(user_id, listing.id)
+                # serial = {
+                # 'id': listing.id,
+                # 'product_image_url': listing.product_image_url,
+                # 'avatar_url': listing.avatar_url,
+                # 'price': listing.price,
+                # 'views': listing.views,
+                # 'seller_snapchat_username': user.snapchat_username,
+                # 'is_favorited': is_favorited(user_id, listing.id)
+                # }
                 return_list.append(serial)
 
     return return_list

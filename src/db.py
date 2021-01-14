@@ -45,6 +45,7 @@ class Listing(db.Model):
         self.views = 0 
 
     def serialize(self):
+        favorites = [x.serialize() for x in self.favorites]
         return {
             'id': self.id,
             'user_id': self.user_id,
@@ -53,7 +54,8 @@ class Listing(db.Model):
             'price': self.price,
             'views': self.views,
             'reports': [x.serialize() for x in self.reports],
-            'favorites': [x.serialize() for x in self.favorites]
+            'favorites': favorites,
+            'favorite_count': len(favorites)
         }
 
 class Report(db.Model):
