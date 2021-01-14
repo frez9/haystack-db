@@ -97,15 +97,28 @@ def delete_listing(listing_id):
 
     return success_response(deleted_listing)
 
-@app.route('/api/listings/<string:listing_id>/views/increment/', methods=['POST'])
+@app.route('/api/listings/<string:listing_id>/views/increment/', methods=['PUT'])
 def increment_listing_views(listing_id):
     listing = dao.increment_listing_views(listing_id)
     return success_response(listing)
 
-@app.route('/api/listings/<string:listing_id>/status/sold/', methods=['POST'])
+@app.route('/api/listings/<string:listing_id>/status/sold/', methods=['PUT'])
 def listing_status_sold(listing_id):
     listing = dao.listing_status_sold(listing_id)
     return success_response(listing)
+
+@app.route('/api/listings/<string:listing_id>/update/', methods=['PUT'])
+def update_listing_info(listing_id):
+    body = json.loads(request.data)
+    updated_listing = dao.update_listing_info(
+        listing_id=listing_id,
+        price=body.get('price'),
+        title=body.get('title'),
+        description=body.get('description'),
+        condition=body.get('condition')
+    )
+    return success_response(updated_listing)
+
 
 @app.route('/api/reports/create/', methods=['POST'])
 def create_report():

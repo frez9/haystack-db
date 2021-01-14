@@ -102,6 +102,19 @@ def listing_status_sold(listing_id):
     db.session.commit()
     return listing.serialize()
 
+def update_listing_info(listing_id, price, title, description, condition):
+    listing = Listing.query.filter_by(id=listing_id).first()
+    if price != None:
+        listing.price = price 
+    if title != None:
+        listing.title = title 
+    if description != None:
+        listing.description = description
+    if condition != None:
+        listing.condition = condition 
+    db.session.commit()
+    return listing.serialize()
+
 def should_remove_listing(listing_id):
     listing = Listing.query.filter_by(id=listing_id).first()
     report_count = len(listing.reports)

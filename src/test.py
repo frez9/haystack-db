@@ -297,7 +297,7 @@ class TestRoutes(unittest.TestCase):
             return f'{LOCAL_URL}/api/listings/{listing_id}/views/increment/'
         def inc_view(listing_id):
             route = create_route(listing_id)
-            res = requests.post(route)
+            res = requests.put(route)
             body = unwrap_response(res)
             listing = body['data']
 
@@ -315,7 +315,7 @@ class TestRoutes(unittest.TestCase):
             return f'{LOCAL_URL}/api/listings/{listing_id}/status/sold/'
         def sell_listing(listing_id):
             route = create_route(listing_id)
-            res = requests.post(route)
+            res = requests.put(route)
             body = unwrap_response(res)
             listing = body['data']
 
@@ -324,6 +324,28 @@ class TestRoutes(unittest.TestCase):
         
         for i in listings_to_sell:
             sell_listing(i)
+
+    def test_o_update_listing(self):
+        listings_to_update = [6, 7, 8]
+        def create_route(listing_id):
+            return f'{LOCAL_URL}/api/listings/{listing_id}/update/'
+        def create_json(price, title, description, condition):
+            j = {'price': price, 'title': title, 'description': description, 'condition': condition}
+            return json.dumps(j)
+        def update_listing(listing_id, price, title, description, condition):
+            route = create_route(listing_id)
+            res = requests.put(route, data=create_json(price, title, description, condition))
+            body = unwrap_response(res)
+            listing = body['data']
+
+            assert body['success']
+            assert listing['price'] == price 
+            assert listing['title'] == title 
+            assert listing['description'] == description 
+            assert listing['condition'] == condition 
+
+        for i, v in enumerate(listings_to_update):
+            update_listing(v, (i+1)*10, f'new_title{i+1}', f'new_description{i+1}', random.randint(0, 2))
 
 def run_tests():
     sleep(1.5)
