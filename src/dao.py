@@ -85,6 +85,12 @@ def delete_listing(listing_id):
     db.session.commit()
     return listing.serialize()
 
+def increment_listing_views(listing_id):
+    listing = Listing.query.filter_by(id=listing_id).first()
+    listing.views += 1
+    db.session.commit()
+    return listing
+
 def should_remove_listing(listing_id):
     listing = Listing.query.filter_by(id=listing_id).first()
     report_count = len(listing.reports)

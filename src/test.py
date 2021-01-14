@@ -287,6 +287,25 @@ class TestRoutes(unittest.TestCase):
         non_blocked_listings = get_all_listings_user(SAMPLE_USER1)
         for l in non_blocked_listings:
             assert l['seller_snapchat_username'] != 'freznoel' 
+    
+    def test_m_increment_listing_views(self):
+        listings_to_inc = [1, 2, 4, 5]
+        amount_to_inc_views = [random.randint(0, 15) for i in range(5)]
+        def create_route(listing_id):
+            return f'{LOCAL_URL}/api/listings/{listing_id}/views/increment/'
+        def inc_view(listing_id):
+            route = create_route(listing_id)
+            res = requests.post(route)
+            body = unwrap_response(res)
+            listing = body['data']
+
+            assert body['success']
+            assert listing['id'] == listing_id 
+            assert listing['views'] > 0
+
+        for i, v in enumerate(listings_to_inc):
+            for j in range(amount_to_inc_views[i]):
+                inc_view(v)
 
 def run_tests():
     sleep(1.5)
