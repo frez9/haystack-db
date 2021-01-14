@@ -91,7 +91,13 @@ def increment_listing_views(listing_id):
     listing = Listing.query.filter_by(id=listing_id).first()
     listing.views += 1
     db.session.commit()
-    return listing
+    return listing.serialize()
+
+def listing_status_sold(listing_id):
+    listing = Listing.query.filter_by(id=listing_id).first()
+    listing.sold = True 
+    db.session.commit()
+    return listing.serialize()
 
 def should_remove_listing(listing_id):
     listing = Listing.query.filter_by(id=listing_id).first()

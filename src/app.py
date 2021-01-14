@@ -97,7 +97,12 @@ def delete_listing(listing_id):
 @app.route('/api/listings/<string:listing_id>/views/increment/', methods=['POST'])
 def increment_listing_views(listing_id):
     listing = dao.increment_listing_views(listing_id)
-    return success_response(listing.serialize())
+    return success_response(listing)
+
+@app.route('/api/listings/<string:listing_id>/status/sold/', methods=['POST'])
+def listing_status_sold(listing_id):
+    listing = dao.listing_status_sold(listing_id)
+    return success_response(listing)
 
 @app.route('/api/reports/create/', methods=['POST'])
 def create_report():
