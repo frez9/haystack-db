@@ -69,6 +69,7 @@ def get_paginated_listings(user_id, page_number):
                 'product_image_url': listing.product_image_url,
                 'avatar_url': listing.avatar_url,
                 'price': listing.price,
+                'views': listing.views,
                 'seller_snapchat_username': user.snapchat_username,
                 'is_favorited': is_favorited(user_id, listing.id)
             }
@@ -136,6 +137,7 @@ def get_favorites_by_userid(user_id):
             'product_image_url': listing.product_image_url,
             'avatar_url': listing.avatar_url,
             'price': listing.price,
+            'views': listing.views,
             'seller_snapchat_username': seller.snapchat_username,
             'is_favorited': is_favorited(user_id, listing.id)
         }

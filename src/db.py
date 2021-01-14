@@ -32,6 +32,7 @@ class Listing(db.Model):
     product_image_url = db.Column(db.String, nullable=False)
     avatar_url = db.Column(db.String, nullable=True)
     price = db.Column(db.Float, nullable=False)
+    views = db.Column(db.Integer, nullable=False)
     time_created = db.Column(db.DateTime, default=datetime.utcnow)
     reports = db.relationship('Report', cascade='delete')
     favorites = db.relationship('Favorite', cascade='delete')
@@ -41,6 +42,7 @@ class Listing(db.Model):
         self.product_image_url = kwargs.get('product_image_url')
         self.avatar_url = kwargs.get('avatar_url')
         self.price = kwargs.get('price')
+        self.views = 0 
 
     def serialize(self):
         return {
@@ -49,6 +51,7 @@ class Listing(db.Model):
             'product_image_url': self.product_image_url,
             'avatar_url': self.avatar_url,
             'price': self.price,
+            'views': self.views,
             'reports': [x.serialize() for x in self.reports],
             'favorites': [x.serialize() for x in self.favorites]
         }
