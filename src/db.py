@@ -34,6 +34,9 @@ class Listing(db.Model):
     price = db.Column(db.Float, nullable=False)
     views = db.Column(db.Integer, nullable=False)
     sold = db.Column(db.Boolean, nullable=False)
+    title = db.Column(db.String, nullable=False)
+    description = db.Column(db.String, nullable=True)
+    condition = db.Column(db.Integer, nullable=False)
     time_created = db.Column(db.DateTime, default=datetime.utcnow)
     reports = db.relationship('Report', cascade='delete')
     favorites = db.relationship('Favorite', cascade='delete')
@@ -43,6 +46,9 @@ class Listing(db.Model):
         self.product_image_url = kwargs.get('product_image_url')
         self.avatar_url = kwargs.get('avatar_url')
         self.price = kwargs.get('price')
+        self.title = kwargs.get('title')
+        self.description = kwargs.get('description')
+        self.condition = kwargs.get('condition')
         self.views = 0 
         self.sold = False 
 
@@ -56,6 +62,9 @@ class Listing(db.Model):
             'price': self.price,
             'views': self.views,
             'sold': self.sold,
+            'title': self.title,
+            'description': self.description,
+            'condition': self.condition,
             'reports': [x.serialize() for x in self.reports],
             'favorites': favorites,
             'favorite_count': len(favorites)

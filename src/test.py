@@ -101,12 +101,12 @@ class TestRoutes(unittest.TestCase):
     def test_d_create_listing(self):
         def create_route(external_id):
             return f'{LOCAL_URL}/api/users/{external_id}/listings/create/'
-        def create_json(product_image_url, price):
-            j = {'product_image_url': product_image_url, 'price': price}
+        def create_json(product_image_url, price, title, description, condition):
+            j = {'product_image_url': product_image_url, 'price': price, 'title': title, 'description': description, 'condition': condition}
             return json.dumps(j)
-        def create_assert_listing(user, url, user_id, price):
+        def create_assert_listing(user, url, user_id, price, title, description, condition):
             route = create_route(user['external_id'])
-            res = requests.post(route, data=create_json(url, price))
+            res = requests.post(route, data=create_json(url, price, title, description, condition))
             body = unwrap_response(res)
             listing = body['data']
 
@@ -119,8 +119,10 @@ class TestRoutes(unittest.TestCase):
         for i in range(i_num):
             price1 = random.randint(0, 100)
             price2 = random.randint(0, 100)
-            create_assert_listing(SAMPLE_USER1, f'www.product{i}_url.com', USER1_ID, price1)
-            create_assert_listing(SAMPLE_USER2, f'www.product{i_num+i}_url.com', USER2_ID, price2)
+            cond1 = random.randint(0, 2)
+            cond2 = random.randint(0, 2)
+            create_assert_listing(SAMPLE_USER1, f'www.product{i}_url.com', USER1_ID, price1, f'title{i}', 'sample description', cond1)
+            create_assert_listing(SAMPLE_USER2, f'www.product{i_num+i}_url.com', USER2_ID, price2, f'title{i_num+i}', 'sample description', cond2)
 
     def test_e_get_my_listings(self):
         def create_route(external_id):
@@ -290,7 +292,7 @@ class TestRoutes(unittest.TestCase):
     
     def test_m_increment_listing_views(self):
         listings_to_inc = [1, 2, 4, 5]
-        amount_to_inc_views = [random.randint(0, 15) for i in range(5)]
+        amount_to_inc_views = [random.randint(1, 15) for i in range(5)]
         def create_route(listing_id):
             return f'{LOCAL_URL}/api/listings/{listing_id}/views/increment/'
         def inc_view(listing_id):

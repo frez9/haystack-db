@@ -33,12 +33,15 @@ def update_snapchat_username(user_id, username):
     db.session.commit()
     return user.serialize()
 
-def create_listing(user_id, product_image_url, avatar_url, price):
+def create_listing(user_id, product_image_url, avatar_url, price, title, description, condition):
     new_listing = Listing(
         user_id=user_id,
         product_image_url=product_image_url,
         avatar_url=avatar_url,
-        price=price
+        price=price,
+        title=title,
+        description=description,
+        condition=condition
     )
 
     db.session.add(new_listing)
