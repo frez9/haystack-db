@@ -9,7 +9,7 @@ class User(db.Model):
     external_id = db.Column(db.String, nullable=False)
     display_name = db.Column(db.String, nullable=True)
     avatar_url = db.Column(db.String, nullable=True)
-    snapchat_username = db.Column(db.String, nullable=True)
+    # snapchat_username = db.Column(db.String, nullable=True)
     time_created = db.Column(db.DateTime, default=datetime.utcnow)
 
     def __init__(self, **kwargs):
@@ -21,8 +21,8 @@ class User(db.Model):
         return {
             'id': self.id,
             'external_id': self.external_id,
-            'avatar_url': self.avatar_url,
-            'snapchat_username': self.snapchat_username
+            'avatar_url': self.avatar_url
+            # 'snapchat_username': self.snapchat_username
         }
 
 class Listing(db.Model):

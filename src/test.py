@@ -64,7 +64,7 @@ class TestRoutes(unittest.TestCase):
         assert body1["success"]
         assert new_user1["external_id"] == SAMPLE_USER1["external_id"]
         assert new_user1["avatar_url"] == SAMPLE_USER1["avatar_url"]
-        assert new_user1["snapchat_username"] == None
+        # assert new_user1["snapchat_username"] == None
 
         res = requests.post(route, data=json.dumps(SAMPLE_USER2))
         body2 = unwrap_response(res) 
@@ -73,30 +73,30 @@ class TestRoutes(unittest.TestCase):
         assert body1['success']
         assert new_user2['external_id'] == SAMPLE_USER2['external_id']
         assert new_user2['avatar_url'] == SAMPLE_USER2['avatar_url']
-        assert new_user1['snapchat_username'] == None 
+        # assert new_user1['snapchat_username'] == None 
 
-    def test_c_update_snapchat_username(self):
-        def create_route(external_id):
-            return f'{LOCAL_URL}/api/users/{external_id}/username/update/'
-        def create_json(snapchat_username):
-            j = {'snapchat_username': snapchat_username}
-            return json.dumps(j)
+    # def test_c_update_snapchat_username(self):
+    #     def create_route(external_id):
+    #         return f'{LOCAL_URL}/api/users/{external_id}/username/update/'
+    #     def create_json(snapchat_username):
+    #         j = {'snapchat_username': snapchat_username}
+    #         return json.dumps(j)
         
-        route1 = create_route(SAMPLE_USER1['external_id'])
-        res1 = requests.post(route1, data=create_json('awhochman'))
-        body1 = unwrap_response(res1)
-        updated_user1 = body1['data']
+    #     route1 = create_route(SAMPLE_USER1['external_id'])
+    #     res1 = requests.put(route1, data=create_json('awhochman'))
+    #     body1 = unwrap_response(res1)
+    #     updated_user1 = body1['data']
 
-        assert body1['success']
-        assert updated_user1['snapchat_username'] == 'awhochman'
+    #     assert body1['success']
+    #     assert updated_user1['snapchat_username'] == 'awhochman'
 
-        route2 = create_route(SAMPLE_USER2['external_id'])
-        res2 = requests.post(route2, data=create_json('freznoel'))
-        body2 = unwrap_response(res2)
-        updated_user2 = body2['data']
+    #     route2 = create_route(SAMPLE_USER2['external_id'])
+    #     res2 = requests.put(route2, data=create_json('freznoel'))
+    #     body2 = unwrap_response(res2)
+    #     updated_user2 = body2['data']
 
-        assert body2['success']
-        assert updated_user2['snapchat_username'] == 'freznoel'
+    #     assert body2['success']
+    #     assert updated_user2['snapchat_username'] == 'freznoel'
 
     def test_d_create_listing(self):
         def create_route(external_id):
@@ -288,7 +288,7 @@ class TestRoutes(unittest.TestCase):
 
         non_blocked_listings = get_all_listings_user(SAMPLE_USER1)
         for l in non_blocked_listings:
-            assert l['seller_snapchat_username'] != 'freznoel' 
+            assert l['user_id'] != USER2_ID 
     
     def test_m_increment_listing_views(self):
         listings_to_inc = [1, 2, 4, 5]

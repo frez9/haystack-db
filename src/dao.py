@@ -27,11 +27,11 @@ def create_user(external_id, display_name, avatar_url):
     db.session.commit()
     return new_user.serialize()
 
-def update_snapchat_username(user_id, username):
-    user = User.query.filter_by(id=user_id).first()
-    user.snapchat_username = username
-    db.session.commit()
-    return user.serialize()
+# def update_snapchat_username(user_id, username):
+#     user = User.query.filter_by(id=user_id).first()
+#     user.snapchat_username = username
+#     db.session.commit()
+#     return user.serialize()
 
 def create_listing(user_id, product_image_url, avatar_url, price, title, description, condition):
     new_listing = Listing(
@@ -69,7 +69,7 @@ def get_paginated_listings(user_id, page_number):
 
             if blocked is None:
                 serial = listing.serialize()
-                serial['seller_snapchat_username'] = user.snapchat_username
+                # serial['seller_snapchat_username'] = user.snapchat_username
                 serial['is_favorited'] = is_favorited(user_id, listing.id)
                 # serial = {
                 # 'id': listing.id,
@@ -168,7 +168,7 @@ def get_favorites_by_userid(user_id):
             'avatar_url': listing.avatar_url,
             'price': listing.price,
             'views': listing.views,
-            'seller_snapchat_username': seller.snapchat_username,
+            # 'seller_snapchat_username': seller.snapchat_username,
             'is_favorited': is_favorited(user_id, listing.id)
         }
 
