@@ -9,7 +9,6 @@ class User(db.Model):
     external_id = db.Column(db.String, nullable=False)
     display_name = db.Column(db.String, nullable=True)
     avatar_url = db.Column(db.String, nullable=True)
-    # snapchat_username = db.Column(db.String, nullable=True)
     notification_token = db.Column(db.String, nullable=True)
     time_created = db.Column(db.DateTime, default=datetime.utcnow)
 
@@ -25,7 +24,6 @@ class User(db.Model):
             'external_id': self.external_id,
             'avatar_url': self.avatar_url,
             'notification_token': self.notification_token
-            # 'snapchat_username': self.snapchat_username
         }
 
 class Listing(db.Model):

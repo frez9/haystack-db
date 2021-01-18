@@ -34,12 +34,6 @@ def update_user_notif_token(external_id, notification_token):
     db.session.commit()
     return user.serialize()
 
-# def update_snapchat_username(user_id, username):
-#     user = User.query.filter_by(id=user_id).first()
-#     user.snapchat_username = username
-#     db.session.commit()
-#     return user.serialize()
-
 def create_listing(user_id, product_image_url, avatar_url, price, title, description, condition):
     new_listing = Listing(
         user_id=user_id,
@@ -62,6 +56,11 @@ def is_favorited(user_id, listing_id):
 
     return True
 
+def get_push_token_from_listing(listing):
+    seller_id = listing.user_id
+    seller = User.query.filter_by(id=seller_id).first()
+    return seller.notification_token
+
 def get_paginated_listings(user_id, page_number):
     listing_query = Listing.query.order_by(Listing.id.desc()).paginate(page_number, 45, False)
     listings = listing_query.items
@@ -74,19 +73,12 @@ def get_paginated_listings(user_id, page_number):
 
             blocked = Block.query.filter_by(blocker_id=user_id, blockee_id=seller_id).first()
 
-            if blocked is None:
+            if blocked is None: 
+                seller_push_token = get_push_token_from_listing(listing)
+
                 serial = listing.serialize()
-                # serial['seller_snapchat_username'] = user.snapchat_username
                 serial['is_favorited'] = is_favorited(user_id, listing.id)
-                # serial = {
-                # 'id': listing.id,
-                # 'product_image_url': listing.product_image_url,
-                # 'avatar_url': listing.avatar_url,
-                # 'price': listing.price,
-                # 'views': listing.views,
-                # 'seller_snapchat_username': user.snapchat_username,
-                # 'is_favorited': is_favorited(user_id, listing.id)
-                # }
+                serial['notification_token'] = seller_push_token
                 return_list.append(serial)
 
     return return_list
@@ -94,7 +86,13 @@ def get_paginated_listings(user_id, page_number):
 def get_paginated_listings_guest(page_number):
     listing_query = Listing.query.order_by(Listing.id.desc()).paginate(page_number, 45, False)
     listings = listing_query.items
-    return [l.serialize() for l in listings]
+
+    return_listings = []
+    for l in listings:
+        serial = l.serialize()
+        serial['notification_token'] = get_push_token_from_listing(l)
+        return_listings.append(serial)
+    return return_listings
 
 def delete_listing(listing_id):
     listing = Listing.query.filter_by(id=listing_id).first()
