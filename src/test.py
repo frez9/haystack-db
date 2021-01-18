@@ -355,6 +355,25 @@ class TestRoutes(unittest.TestCase):
         
         assert body['success']
         assert len(listings) == 45
+    
+    def test_q_update_notification_token(self):
+        def create_route(user_id):
+            return f'{LOCAL_URL}/api/users/{user_id}/update/notification_id/'
+        def create_json(notif_id):
+            j = {'notification_token': notif_id}
+            return json.dumps(j)
+        def update_notif_token(user_id, notif_id):
+            route = create_route(user_id)
+            res = requests.put(route, data=create_json(notif_id))
+            body = unwrap_response(res)
+            user = body['data']
+
+            assert body['success']
+            a = user['notification_token']
+            assert user['notification_token'] == notif_id
+
+        update_notif_token(SAMPLE_USER1['external_id'], 'token1')
+        update_notif_token(SAMPLE_USER2['external_id'], 'token2')
 
 def run_tests():
     sleep(1.5)

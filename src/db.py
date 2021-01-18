@@ -10,18 +10,21 @@ class User(db.Model):
     display_name = db.Column(db.String, nullable=True)
     avatar_url = db.Column(db.String, nullable=True)
     # snapchat_username = db.Column(db.String, nullable=True)
+    notification_token = db.Column(db.String, nullable=True)
     time_created = db.Column(db.DateTime, default=datetime.utcnow)
 
     def __init__(self, **kwargs):
         self.external_id = kwargs.get('external_id')
         self.display_name = kwargs.get('display_name')
         self.avatar_url = kwargs.get('avatar_url')
+        self.notification_token = kwargs.get('notification_token')
 
     def serialize(self):
         return {
             'id': self.id,
             'external_id': self.external_id,
-            'avatar_url': self.avatar_url
+            'avatar_url': self.avatar_url,
+            'notification_token': self.notification_token
             # 'snapchat_username': self.snapchat_username
         }
 

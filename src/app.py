@@ -34,6 +34,15 @@ def create_user():
     )
     return success_response(user, 201)
 
+@app.route('/api/users/<string:external_id>/update/notification_id/', methods=['PUT'])
+def update_notification_id(external_id):
+    body = json.loads(request.data)
+    updated_user = dao.update_user_notif_token(
+        external_id=external_id,
+        notification_token=body.get('notification_token')
+    )
+    return success_response(updated_user)
+
 # @app.route('/api/users/<string:external_id>/username/update/', methods=['PUT'])
 # def update_snapchat_username(external_id):
 #     body = json.loads(request.data)

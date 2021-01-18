@@ -12,7 +12,7 @@ def get_avatarurl_by_userid(user_id):
 def get_listings_by_userid(user_id):
     return [x.serialize() for x in Listing.query.filter_by(user_id=user_id).order_by(Listing.id.desc()).all()]
 
-def create_user(external_id, display_name, avatar_url):
+def create_user(external_id, display_name, avatar_url, notif_token=None):
 
     if User.query.filter_by(external_id=external_id).first() != None:
         return 
@@ -20,12 +20,19 @@ def create_user(external_id, display_name, avatar_url):
     new_user = User(
         external_id=external_id,
         display_name=display_name,
-        avatar_url=avatar_url
+        avatar_url=avatar_url,
+        notification_token=notif_token
     )
 
     db.session.add(new_user)
     db.session.commit()
     return new_user.serialize()
+
+def update_user_notif_token(external_id, notification_token):
+    user = User.query.filter_by(external_id=external_id).first()
+    user.notification_token = notification_token
+    db.session.commit()
+    return user.serialize()
 
 # def update_snapchat_username(user_id, username):
 #     user = User.query.filter_by(id=user_id).first()
