@@ -84,6 +84,11 @@ def get_paginated_listings(user_id, page_number):
 
     return return_list
 
+def get_paginated_listings_guest(page_number):
+    listing_query = Listing.query.order_by(Listing.id.desc()).paginate(page_number, 45, False)
+    listings = listing_query.items
+    return [l.serialize() for l in listings]
+
 def delete_listing(listing_id):
     listing = Listing.query.filter_by(id=listing_id).first()
     db.session.delete(listing)

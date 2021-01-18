@@ -88,6 +88,12 @@ def get_paginated_listings(external_id, page_number):
 
     return success_response(listings)
 
+@app.route('/api/users/GUEST/listings/page/<int:page_number>/')
+def get_paginated_listings_guest(page_number):
+    listings = dao.get_paginated_listings_guest(page_number)
+    return success_response(listings)
+
+
 @app.route('/api/listings/<string:listing_id>/delete/', methods=['DELETE'])
 def delete_listing(listing_id):
     # body = json.loads(request.data)

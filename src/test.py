@@ -347,6 +347,15 @@ class TestRoutes(unittest.TestCase):
         for i, v in enumerate(listings_to_update):
             update_listing(v, (i+1)*10, f'new_title{i+1}', f'new_description{i+1}', random.randint(0, 2))
 
+    def test_p_guest_listings(self):
+        route = f'{LOCAL_URL}/api/users/GUEST/listings/page/0/'
+        res = requests.get(route)
+        body = unwrap_response(res)
+        listings = body['data']
+        
+        assert body['success']
+        assert len(listings) == 45
+
 def run_tests():
     sleep(1.5)
     unittest.main()
