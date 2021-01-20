@@ -91,6 +91,11 @@ def get_paginated_listings_guest(page_number):
     listings = dao.get_paginated_listings_guest(page_number)
     return success_response(listings)
 
+@app.route('/api/user/payment_token/')
+def get_payment_token():
+    token = dao.get_payment_token()
+    return success_response(token)
+
 
 @app.route('/api/listings/<string:listing_id>/delete/', methods=['DELETE'])
 def delete_listing(listing_id):
@@ -108,8 +113,13 @@ def increment_listing_views(listing_id):
 
 @app.route('/api/listings/<string:listing_id>/status/sold/', methods=['PUT'])
 def listing_status_sold(listing_id):
-    listing = dao.listing_status_sold(listing_id)
-    return success_response(listing)
+    body = json.loads(request.data)
+    transaction_result = dao.listing_status_sold(
+        listing_id=listing_id,
+        payment_nonce=body.get('payment_nonce'),
+        device_data=body.get('device_data')
+        )
+    return success_response(transaction_result)
 
 @app.route('/api/listings/<string:listing_id>/update/', methods=['PUT'])
 def update_listing_info(listing_id):

@@ -309,21 +309,21 @@ class TestRoutes(unittest.TestCase):
             for j in range(amount_to_inc_views[i]):
                 inc_view(v)
 
-    def test_n_listing_status_sold(self):
-        listings_to_sell = [10, 15, 20]
-        def create_route(listing_id):
-            return f'{LOCAL_URL}/api/listings/{listing_id}/status/sold/'
-        def sell_listing(listing_id):
-            route = create_route(listing_id)
-            res = requests.put(route)
-            body = unwrap_response(res)
-            listing = body['data']
+    # def test_n_listing_status_sold(self):
+    #     listings_to_sell = [10, 15, 20]
+    #     def create_route(listing_id):
+    #         return f'{LOCAL_URL}/api/listings/{listing_id}/status/sold/'
+    #     def sell_listing(listing_id):
+    #         route = create_route(listing_id)
+    #         res = requests.put(route)
+    #         body = unwrap_response(res)
+    #         listing = body['data']
 
-            assert body['success']
-            assert listing['sold'] == True 
+    #         assert body['success']
+    #         assert listing['sold'] == True 
         
-        for i in listings_to_sell:
-            sell_listing(i)
+    #     for i in listings_to_sell:
+    #         sell_listing(i)
 
     def test_o_update_listing(self):
         listings_to_update = [6, 7, 8]

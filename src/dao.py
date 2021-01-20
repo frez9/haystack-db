@@ -1,5 +1,6 @@
 from db import db, User, Listing, Report, Favorite, Block
 from datetime import datetime
+import payments 
 
 def get_userid_by_externalid(external_id):
     user = User.query.filter_by(external_id=external_id).first()
@@ -106,11 +107,19 @@ def increment_listing_views(listing_id):
     db.session.commit()
     return listing.serialize()
 
-def listing_status_sold(listing_id):
+def get_payment_token():
+    payment_token = payments.gateway.client_token.generate()
+    return {'payment_token': payment_token}
+
+def listing_status_sold(listing_id, payment_nonce, device_data):
+
     listing = Listing.query.filter_by(id=listing_id).first()
     listing.sold = True 
     db.session.commit()
-    return listing.serialize()
+
+    transaction_result = payments.process_payments(listing, payment_nonce, device_data)
+
+    return transaction_result
 
 def update_listing_info(listing_id, price, title, description, condition):
     listing = Listing.query.filter_by(id=listing_id).first()
@@ -232,6 +241,7 @@ def get_display_names():
         'id': user.id,
         'display_name': user.display_name
         }
+        # serial = user.serialize()
 
         return_list.append(serial)
 
