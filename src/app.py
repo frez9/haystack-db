@@ -20,10 +20,6 @@ def success_response(data, code=200):
 def failure_response(message, code=404):
     return json.dumps({"success": False, "error": message}), code
 
-@app.route("/")
-def test():
-    return "Hello World!", 200
-
 @app.route('/api/users/create/', methods=['POST'])
 def create_user():
     body = json.loads(request.data)
@@ -42,8 +38,6 @@ def update_notification_id(external_id):
         notification_token=body.get('notification_token')
     )
     return success_response(updated_user)
-
-    return success_response(updated_user_info)
 
 @app.route('/api/users/<string:external_id>/listings/create/', methods=['POST'])
 def create_listing(external_id):
