@@ -181,17 +181,15 @@ def get_favorites_by_userid(user_id):
 
         blocked = Block.query.filter_by(blocker_id=user_id, blockee_id=seller_id).first()
 
-        serial = {
+        if blocked is None:
+            serial = {
             'id': listing.id,
             'product_image_url': listing.product_image_url,
             'avatar_url': listing.avatar_url,
             'price': listing.price,
             'views': listing.views,
-            # 'seller_snapchat_username': seller.snapchat_username,
             'is_favorited': is_favorited(user_id, listing.id)
-        }
-
-        if blocked is None:
+            }
             return_list.append(serial)
 
 

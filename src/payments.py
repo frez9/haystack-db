@@ -23,7 +23,10 @@ def process_payments(listing, payment_nonce, device_data):
     "payment_method_nonce": payment_nonce,
     "device_data": device_data,
     "options": {
-      "submit_for_settlement": True
+      "submit_for_settlement": True,
+      "venmo": {
+        "profile_id": YOUR_VENMO_PROFILE_ID
+      }
     }
     })
     result_json = {
