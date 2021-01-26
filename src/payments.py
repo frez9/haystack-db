@@ -25,7 +25,7 @@ def process_payments(listing, payment_nonce, device_data):
     "options": {
       "submit_for_settlement": True,
       "venmo": {
-        "profile_id": YOUR_VENMO_PROFILE_ID
+        "profile_id": "frez-9"
       }
     }
     })
