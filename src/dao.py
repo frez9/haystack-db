@@ -35,6 +35,12 @@ def update_user_notif_token(external_id, notification_token):
     db.session.commit()
     return user.serialize()
 
+def update_user_phone(external_id, phone_number):
+    user = User.query.filter_by(external_id=external_id).first()
+    user.phone_number = phone_number
+    db.session.commit()
+    return user.serialize()
+
 def create_listing(user_id, product_image_url, avatar_url, price, title, description, condition):
     new_listing = Listing(
         user_id=user_id,
@@ -248,3 +254,7 @@ def get_display_names():
 def get_all_listings():
     listings = Listing.query.all()
     return [i.serialize() for i in listings]
+
+def get_all_users():
+    users = User.query.all()
+    return [i.serialize() for i in users]

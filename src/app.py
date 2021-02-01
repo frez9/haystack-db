@@ -39,6 +39,15 @@ def update_notification_id(external_id):
     )
     return success_response(updated_user)
 
+@app.route('/api/users/<string:external_id>/update/phone_number/', methods=['PUT'])
+def update_phone_number(external_id):
+    body = json.loads(request.data)
+    updated_user = dao.update_user_phone(
+        external_id=external_id,
+        phone_number=body.get('phone_number')
+    )
+    return success_response(updated_user)
+
 @app.route('/api/users/<string:external_id>/listings/create/', methods=['POST'])
 def create_listing(external_id):
     body = json.loads(request.data)
@@ -200,6 +209,12 @@ def get_all_listings():
     listings = dao.get_all_listings()
 
     return success_response(listings)
+
+@app.route('/api/master/austin/all_users/', methods=['GET'])
+def get_all_users():
+    users = dao.get_all_users()
+
+    return success_response(users)
 
 
 if __name__ == "__main__":

@@ -10,6 +10,7 @@ class User(db.Model):
     display_name = db.Column(db.String, nullable=True)
     avatar_url = db.Column(db.String, nullable=True)
     notification_token = db.Column(db.String, nullable=True)
+    phone_number = db.Column(db.String, nullable=True)
     time_created = db.Column(db.DateTime, default=datetime.utcnow)
 
     def __init__(self, **kwargs):
@@ -17,13 +18,15 @@ class User(db.Model):
         self.display_name = kwargs.get('display_name')
         self.avatar_url = kwargs.get('avatar_url')
         self.notification_token = kwargs.get('notification_token')
+        self.phone_number = kwargs.get('phone_number')
 
     def serialize(self):
         return {
             'id': self.id,
             'external_id': self.external_id,
             'avatar_url': self.avatar_url,
-            'notification_token': self.notification_token
+            'notification_token': self.notification_token,
+            'phone_number': self.phone_number
         }
 
 class Listing(db.Model):

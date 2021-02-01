@@ -369,11 +369,28 @@ class TestRoutes(unittest.TestCase):
             user = body['data']
 
             assert body['success']
-            a = user['notification_token']
             assert user['notification_token'] == notif_id
 
         update_notif_token(SAMPLE_USER1['external_id'], 'token1')
         update_notif_token(SAMPLE_USER2['external_id'], 'token2')
+    
+    def test_r_update_phone_number(self):
+        def create_route(user_id):
+            return f'{LOCAL_URL}/api/users/{user_id}/update/phone_number/'
+        def create_json(phone_number):
+            j = {'phone_number': phone_number}
+            return json.dumps(j)
+        def update_phone_number(user_id, phone_number):
+            route = create_route(user_id)
+            res = requests.put(route, data=create_json(phone_number))
+            body = unwrap_response(res)
+            user = body['data']
+
+            assert body['success']
+            assert user['phone_number'] == phone_number
+        
+        update_phone_number(SAMPLE_USER1['external_id'], '2031234567')
+        update_phone_number(SAMPLE_USER2['external_id'], '2030987654')
 
 def run_tests():
     sleep(1.5)
