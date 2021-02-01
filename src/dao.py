@@ -1,10 +1,15 @@
 from db import db, User, Listing, Report, Favorite, Block
 from datetime import datetime
 import payments 
+import emails
 
 def get_userid_by_externalid(external_id):
     user = User.query.filter_by(external_id=external_id).first()
     return user.id
+
+def get_user_by_userid(user_id):
+    user = User.query.filter_by(id=user_id).first()
+    return user
 
 def get_avatarurl_by_userid(user_id):
     user = User.query.filter_by(id=user_id).first()
@@ -124,6 +129,10 @@ def listing_status_sold(listing_id, payment_nonce, device_data):
 
     transaction_result = payments.process_payments(listing, payment_nonce, device_data)
 
+    user = get_user_by_userid(listing.user_id)
+    emails.listing_sold(listing, user)
+
+    # return listing.serialize()
     return transaction_result
 
 def update_listing_info(listing_id, price, description, condition):
