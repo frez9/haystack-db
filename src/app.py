@@ -59,7 +59,6 @@ def create_listing(external_id):
         user_id=user_id,
         product_image_url=body.get('product_image_url'),
         avatar_url=avatar_url,
-        title=body.get('title'),
         description=body.get('description'),
         condition=body.get('condition'),
         price=body.get('price')
@@ -130,7 +129,6 @@ def update_listing_info(listing_id):
     updated_listing = dao.update_listing_info(
         listing_id=listing_id,
         price=body.get('price'),
-        title=body.get('title'),
         description=body.get('description'),
         condition=body.get('condition')
     )

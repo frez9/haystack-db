@@ -101,12 +101,12 @@ class TestRoutes(unittest.TestCase):
     def test_d_create_listing(self):
         def create_route(external_id):
             return f'{LOCAL_URL}/api/users/{external_id}/listings/create/'
-        def create_json(product_image_url, price, title, description, condition):
-            j = {'product_image_url': product_image_url, 'price': price, 'title': title, 'description': description, 'condition': condition}
+        def create_json(product_image_url, price, description, condition):
+            j = {'product_image_url': product_image_url, 'price': price, 'description': description, 'condition': condition}
             return json.dumps(j)
-        def create_assert_listing(user, url, user_id, price, title, description, condition):
+        def create_assert_listing(user, url, user_id, price, description, condition):
             route = create_route(user['external_id'])
-            res = requests.post(route, data=create_json(url, price, title, description, condition))
+            res = requests.post(route, data=create_json(url, price, description, condition))
             body = unwrap_response(res)
             listing = body['data']
 
@@ -121,8 +121,8 @@ class TestRoutes(unittest.TestCase):
             price2 = random.randint(0, 100)
             cond1 = random.randint(0, 2)
             cond2 = random.randint(0, 2)
-            create_assert_listing(SAMPLE_USER1, f'www.product{i}_url.com', USER1_ID, price1, f'title{i}', 'sample description', cond1)
-            create_assert_listing(SAMPLE_USER2, f'www.product{i_num+i}_url.com', USER2_ID, price2, f'title{i_num+i}', 'sample description', cond2)
+            create_assert_listing(SAMPLE_USER1, f'www.product{i}_url.com', USER1_ID, price1, 'sample description', cond1)
+            create_assert_listing(SAMPLE_USER2, f'www.product{i_num+i}_url.com', USER2_ID, price2, 'sample description', cond2)
 
     def test_e_get_my_listings(self):
         def create_route(external_id):
@@ -329,23 +329,22 @@ class TestRoutes(unittest.TestCase):
         listings_to_update = [6, 7, 8]
         def create_route(listing_id):
             return f'{LOCAL_URL}/api/listings/{listing_id}/update/'
-        def create_json(price, title, description, condition):
-            j = {'price': price, 'title': title, 'description': description, 'condition': condition}
+        def create_json(price, description, condition):
+            j = {'price': price, 'description': description, 'condition': condition}
             return json.dumps(j)
-        def update_listing(listing_id, price, title, description, condition):
+        def update_listing(listing_id, price, description, condition):
             route = create_route(listing_id)
-            res = requests.put(route, data=create_json(price, title, description, condition))
+            res = requests.put(route, data=create_json(price, description, condition))
             body = unwrap_response(res)
             listing = body['data']
 
             assert body['success']
             assert listing['price'] == price 
-            assert listing['title'] == title 
             assert listing['description'] == description 
             assert listing['condition'] == condition 
 
         for i, v in enumerate(listings_to_update):
-            update_listing(v, (i+1)*10, f'new_title{i+1}', f'new_description{i+1}', random.randint(0, 2))
+            update_listing(v, (i+1)*10, f'new_description{i+1}', random.randint(0, 2))
 
     def test_p_guest_listings(self):
         route = f'{LOCAL_URL}/api/users/GUEST/listings/page/0/'

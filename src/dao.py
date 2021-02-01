@@ -41,13 +41,12 @@ def update_user_phone(external_id, phone_number):
     db.session.commit()
     return user.serialize()
 
-def create_listing(user_id, product_image_url, avatar_url, price, title, description, condition):
+def create_listing(user_id, product_image_url, avatar_url, price, description, condition):
     new_listing = Listing(
         user_id=user_id,
         product_image_url=product_image_url,
         avatar_url=avatar_url,
         price=price,
-        title=title,
         description=description,
         condition=condition
     )
@@ -127,12 +126,10 @@ def listing_status_sold(listing_id, payment_nonce, device_data):
 
     return transaction_result
 
-def update_listing_info(listing_id, price, title, description, condition):
+def update_listing_info(listing_id, price, description, condition):
     listing = Listing.query.filter_by(id=listing_id).first()
     if price != None:
         listing.price = price 
-    if title != None:
-        listing.title = title 
     if description != None:
         listing.description = description
     if condition != None:
