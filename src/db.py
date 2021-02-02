@@ -1,7 +1,24 @@
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
+from flask import Flask
+
+from flask_script import Manager 
+from flask_migrate import Migrate, MigrateCommand
 
 db = SQLAlchemy()
+
+app = Flask(__name__)
+db_filename = "haystack.db"
+
+app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///%s" % db_filename
+app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
+app.config["SQLALCHEMY_ECHO"] = True
+db.init_app(app)
+
+migrate = Migrate(app, db)
+manager = Manager(app)
+
+manager.add_command('db', MigrateCommand)
 
 class User(db.Model):
     __tablename__ = 'user'
@@ -124,3 +141,6 @@ class Block(db.Model):
             'blocker_id': self.blocker_id,
             'blockee_id': self.blockee_id
         }
+
+if __name__ == '__main__':
+    manager.run()

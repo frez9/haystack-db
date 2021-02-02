@@ -1,16 +1,8 @@
 import json
-from flask import Flask, request
+from flask import request
 import dao
-from db import db
+from db import db, app
 
-app = Flask(__name__)
-db_filename = "haystack.db"
-
-app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///%s" % db_filename
-app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
-app.config["SQLALCHEMY_ECHO"] = True
-
-db.init_app(app)
 with app.app_context():
     db.create_all()
 
